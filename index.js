@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 (async function main(){
     try{
         //Nos conectamos a la base de datos
-        await mongoose.connect("mongodb+srv://lucianofedericoc:wMDbZ5xWQkNUOAlB@eit-64910.ivbc7y5.mongodb.net/")
+        await mongoose.connect("mongodb+srv://lucianofedericoc:wMDbZ5xWQkNUOAlB@eit-64910.ivbc7y5.mongodb.net/Ecommerce")
         console.log('CONEXION A LA DB CORRECTA!!')
 
         //Ponemos nuestro servidor express a escuchar
