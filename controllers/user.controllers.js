@@ -21,12 +21,15 @@ async function getUser(req, res) {
     }
 }
 
-function hellowController(req, res) {
+// function hellowController(req, res) {
 
-    res.send('Hola mundo desde User Controller')
-}
+//     res.send('Hola mundo desde User Controller')
+// }
+
+
 
 //Crear usuario Nuevo
+
 async function createUser(req, res) {
 
     try{
@@ -51,9 +54,27 @@ async function createUser(req, res) {
 
 
 //Borrar usuarios
-function deleteUser(req, res) {
+async function deleteUser(req, res) {
 
-    res.send('DELETE usuario')
+    try{
+        
+        console.log(req.params.idUser)
+
+        const id = req.params.idUser
+
+        const userDeleted = await User.findByIdAndDelete(id)
+
+        res.send({
+            ok:true,
+            message: "Usuario Borrado correctamente",
+            user: userDeleted
+        })
+
+    }catch(error){
+        console.log(error)
+        res.send('No se pudo borrar el usuario')
+    }
+
 
 }
 
