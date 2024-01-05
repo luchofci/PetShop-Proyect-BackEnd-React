@@ -1,5 +1,7 @@
 const User = require('../models/user.model')
 
+
+//Obtener usuarios
 async function getUser(req, res) {
     try {
         const users = await User.find()
@@ -19,24 +21,28 @@ async function getUser(req, res) {
     }
 }
 
-
-
-
-
 function hellowController(req, res) {
 
     res.send('Hola mundo desde User Controller')
 }
 
+//Crear usuario Nuevo
+async function createUser(req, res) {
 
+    try{
+        
+        const user = new User(req.body);
 
-function createUser(req, res) {
+    
+        console.log(user);
+    
+        await user.save()
 
-    const user = req.body;
+        res.send('POST nuevo usuario')
 
-    console.log(users)
-
-    res.send("Post user")
+    }catch(error){
+        res.send(error)
+    }
 
 
 
@@ -44,13 +50,19 @@ function createUser(req, res) {
 
 
 
-
-
-
-
+//Borrar usuarios
 function deleteUser(req, res) {
+
     res.send('DELETE usuario')
+
 }
+
+
+
+
+
+
+
 
 function updateUser(req, res) {
     res.send('UPDATE usuario')
