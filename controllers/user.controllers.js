@@ -4,8 +4,16 @@ const User = require('../models/user.model')
 //Obtener usuarios
 async function getUser(req, res) {
     try {
-        const users = await User.find()
+        const id = req.params.id; //Si no viene undefined.
+        if(id){
+            const user = await User.findById(id)
+            return res.send(user)
+        }
 
+            const users = await User.find()
+
+            res.send(users)
+            
         res.send({
             users,
             message: 'Usuarios obtenidos correctamente',
@@ -79,14 +87,33 @@ async function deleteUser(req, res) {
 }
 
 
+async function updateUser(req, res) {
+
+    console.log(req.query)
+
+    try{
+
+        const id = req.params.id
+        const nuevosValoresBody = req.body
+        const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, {new: true})
+
+        res.send({
+            ok:true,
+            message: "Usuario actualizado correctamente",
+            user: userUpdated
+        })
+
+
+    }catch(error){
+        console.log(error)
+        res.send({
+            ok:false,
+            message:'No se puedo actualizar el usuario'
+        })
+    }
 
 
 
-
-
-
-function updateUser(req, res) {
-    res.send('UPDATE usuario')
 }
 
 module.exports = {

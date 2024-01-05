@@ -5,7 +5,7 @@ const router = express.Router();
 const userController = require('../controllers/user.controllers')
 
 // Definimos ruta obtener todos los usuarios GET
-router.get('/users', userController.getUser);
+router.get('/users/:id?', userController.getUser);
 
 // Agregamos un nuevo usuario POST
 router.post('/users', userController.createUser);
@@ -16,11 +16,16 @@ router.delete('/users/:idUser', userController.deleteUser);
 //Esta es una copioa del de arriba pero ejemplo con 2 parametros. Asimismo el signo de pregunta al final hace q ese parametro en particular noi sea obligatorio.
 // router.delete('/users/:idUser/:active?', userController.deleteUser);
 
+
+
 // Actualizar un usuario PUT
-router.put('/users', userController.updateUser);
+router.put('/users/:id', userController.updateUser);
+//Los query params, no tienen orden.
+
+
 
 // Obtener un usuario especifico GET
-
+// router.get('/users/:id', userController.getUser)
 
 
 
