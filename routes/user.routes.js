@@ -22,6 +22,9 @@ router.delete('/users/:idUser', userController.deleteUser);
 router.put('/users/:id', userController.updateUser);
 //Los query params, no tienen orden.
 
+//Login de usuario 
+router.post('/login', userController.login);
+
 
 
 // Obtener un usuario especifico GET

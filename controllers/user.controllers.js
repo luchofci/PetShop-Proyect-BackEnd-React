@@ -1,5 +1,6 @@
-const User = require('../models/user.model')
-
+const User = require('../models/user.model');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 //Obtener usuarios
 async function getUser(req, res) {
@@ -52,34 +53,39 @@ async function getUser(req, res) {
 
 
 
-// function hellowController(req, res) {
-
-//     res.send('Hola mundo desde User Controller')
-// }
-
-
-
 //Crear usuario Nuevo
-
 async function createUser(req, res) {
 
     try {
 
         const user = new User(req.body);
 
+        //Encriptar la contrase;a // Estas 2 linas son iguales, como son asincronas, eso se lo das con el await, o poniendo hashSync
+        // user.password = bcrypt.hashSync(user.password, saltRounds)
+        user.password = await bcrypt.hash(user.password, saltRounds)
 
-        console.log(user);
+        //Guardamos el usuario
+        const userSaved = await user.save()
 
-        await user.save()
+        //Estas 2 lineas hacen lo mismo. Borramos la contrase;a del objetivo
+        // delete userSaved.password
+        userSaved.password = undefined
 
-        res.send('POST nuevo usuario')
+        console.log(userSaved),
+
+        res.status(201).send({
+            ok: true,
+            message:'Usuario creado Correctamente',
+            user: userSaved,
+        })
 
     } catch (error) {
-        res.send(error)
+        console.log(error)
+        res.status(500).send({
+            ok: false,
+        message: "No se pudo crear el usuario"
+        })
     }
-
-
-
 }
 
 
@@ -139,11 +145,55 @@ async function updateUser(req, res) {
 
 }
 
+
+async function login(req, res){
+    try{
+
+        //Obtenemos del body el email y el password
+        // const password = req.body.password,
+        // const email = req.body.email,
+        //estas 2 linas de arriba es lo mismo que la linea de abajo.
+        const {password, email} =  req.body;
+
+        const user = await User.findOne({email : email.toLowerCase()})
+
+        //Si no existe el usuario
+        if(!user){
+            return res.status(404).send({
+                ok:false,
+                message: "No existe el usuario"
+            })
+        }
+
+        //Si existe el usuario, comparamos la contrase;a
+        const verifiedUser = bcrypt.compare(password, user.password)
+
+
+        //Devolvemos un error si la contrase;a no es correcta
+        //Realizar el login y devolver respuesta correcta.
+
+
+        res.send({
+            ok:true,
+            message:"Login correcto"
+        })
+
+    }catch (error){
+        console.log(error)
+        res.status(500).send({
+            ok:false,
+            message: "No se pudo hacer el login"
+        })
+    }
+}
+
+
 module.exports = {
     // hellowController,
     createUser,
     getUser,
     deleteUser,
     updateUser,
+    login,
 }
 
