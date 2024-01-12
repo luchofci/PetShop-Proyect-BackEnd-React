@@ -5,15 +5,36 @@ const User = require('../models/user.model')
 async function getUser(req, res) {
     try {
         const id = req.params.id; //Si no viene undefined.
-        if(id){
-            const user = await User.findById(id)
-            return res.send(user)
+        if (id) {
+            const user = await User.findById(id, {password: 0}) // si pongo 0 no te da ese dato, si pongo 1, te da ese elemento.
+
+            if (!user.length) {
+                return res.status(404).send({
+                    ok: false,
+                    message: "No se encontro el usuario"
+                })
+            }
+
+            // user.password = undefined; Esto no es necesario dado que arriba en un objeto pusimos password 0.
+
+            return res.send({
+                ok:true,
+                user,
+                message:"Usuario encontraro",
+            }) //mostrar error sin return // EL return es importante, xq no cortaria el IF si no esta.
         }
 
-            const users = await User.find()
+        const users = await User.find()
 
-            res.send(users)
-            
+        if(!users.length){
+            return res.status(404).send({
+                ok:false,
+                message: "No se encontraron usuarios"
+            })
+        }
+
+
+        //Devolvemos todos los usuarios
         res.send({
             users,
             message: 'Usuarios obtenidos correctamente',
@@ -22,12 +43,14 @@ async function getUser(req, res) {
     }
     catch (error) {
         console.log(error);
-        res.send({
-            message: 'Error al obtener usuarios',
-            ok: false
+        res.status(500).send({
+            ok: false,
+            message: 'No se pudo obtener los usuarios'
         })
     }
 }
+
+
 
 // function hellowController(req, res) {
 
@@ -40,18 +63,18 @@ async function getUser(req, res) {
 
 async function createUser(req, res) {
 
-    try{
-        
+    try {
+
         const user = new User(req.body);
 
-    
+
         console.log(user);
-    
+
         await user.save()
 
         res.send('POST nuevo usuario')
 
-    }catch(error){
+    } catch (error) {
         res.send(error)
     }
 
@@ -64,8 +87,8 @@ async function createUser(req, res) {
 //Borrar usuarios
 async function deleteUser(req, res) {
 
-    try{
-        
+    try {
+
         console.log(req.params.idUser)
 
         const id = req.params.idUser
@@ -73,12 +96,12 @@ async function deleteUser(req, res) {
         const userDeleted = await User.findByIdAndDelete(id)
 
         res.send({
-            ok:true,
+            ok: true,
             message: "Usuario Borrado correctamente",
             user: userDeleted
         })
 
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send('No se pudo borrar el usuario')
     }
@@ -91,24 +114,24 @@ async function updateUser(req, res) {
 
     console.log(req.query)
 
-    try{
+    try {
 
         const id = req.params.id
         const nuevosValoresBody = req.body
-        const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, {new: true})
+        const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, { new: true })
 
         res.send({
-            ok:true,
+            ok: true,
             message: "Usuario actualizado correctamente",
             user: userUpdated
         })
 
 
-    }catch(error){
+    } catch (error) {
         console.log(error)
         res.send({
-            ok:false,
-            message:'No se puedo actualizar el usuario'
+            ok: false,
+            message: 'No se puedo actualizar el usuario'
         })
     }
 
