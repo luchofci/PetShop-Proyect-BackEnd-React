@@ -10,7 +10,7 @@ async function getUser(req, res) {
     try {
         const id = req.params.id; //Si no viene undefined.
         if (id) {
-            const user = await User.findById(id, {password: 0}) // si pongo 0 no te da ese dato, si pongo 1, te da ese elemento.
+            const user = await User.findById(id, { password: 0 }) // si pongo 0 no te da ese dato, si pongo 1, te da ese elemento.
 
             if (!user.length) {
                 return res.status(404).send({
@@ -22,17 +22,17 @@ async function getUser(req, res) {
             // user.password = undefined; Esto no es necesario dado que arriba en un objeto pusimos password 0.
 
             return res.send({
-                ok:true,
+                ok: true,
                 user,
-                message:"Usuario encontraro",
+                message: "Usuario encontraro",
             }) //mostrar error sin return // EL return es importante, xq no cortaria el IF si no esta.
         }
 
         const users = await User.find()
 
-        if(!users.length){
+        if (!users.length) {
             return res.status(404).send({
-                ok:false,
+                ok: false,
                 message: "No se encontraron usuarios"
             })
         }
@@ -76,17 +76,17 @@ async function createUser(req, res) {
 
         console.log(userSaved),
 
-        res.status(201).send({
-            ok: true,
-            message:'Usuario creado Correctamente',
-            user: userSaved,
-        })
+            res.status(201).send({
+                ok: true,
+                message: 'Usuario creado Correctamente',
+                user: userSaved,
+            })
 
     } catch (error) {
         console.log(error)
         res.status(500).send({
             ok: false,
-        message: "No se pudo crear el usuario"
+            message: "No se pudo crear el usuario"
         })
     }
 }
@@ -98,11 +98,25 @@ async function deleteUser(req, res) {
 
     try {
 
-        console.log(req.params.idUser)
+        //Comprobar si la persona que desea borrar es un ADMIN?ROLE, si no es ADMIN non lo dejo continuar.
+        if(req.user.role !== "ADMIN_ROLE"){
+            return res.status(401).send({
+                ok:false,
+                message: "No tienes permisos para realizar esta accion"
+            })
+        }
+
 
         const id = req.params.idUser
 
         const userDeleted = await User.findByIdAndDelete(id)
+
+        if(!userDeleted){
+            return res.status(404).send({
+                ok:false,
+                message: "No se encontro el usuario"
+            })
+        }
 
         res.send({
             ok: true,
@@ -149,41 +163,41 @@ async function updateUser(req, res) {
 }
 
 
-async function login(req, res){
-    try{
+async function login(req, res) {
+    try {
 
         //Obtenemos del body el email y el password
-        const {password, email} =  req.body;
+        const { password, email } = req.body;
         // const password = req.body.password,
         // const email = req.body.email,
         //estas 2 linas es lo mismo que la linea de arriba.
 
-        if(!password || !email){
+        if (!password || !email) {
             return res.status(400).send({
-                ok:false,
+                ok: false,
                 message: "Faltan datos"
             })
         }
 
-        const user = await User.findOne({email : email.toLowerCase()})
+        const user = await User.findOne({ email: email.toLowerCase() })
 
         //Si no existe el usuario
-        
-        if(!user){
+
+        if (!user) {
             return res.status(404).send({
-                ok:false,
+                ok: false,
                 message: "No existe el usuario"
             })
         }
-        
+
 
         //Si existe el usuario, y la pass no es correcta, devuelve un error.
         const verifiedUser = await bcrypt.compare(password, user?.password)
 
-        if(!verifiedUser){
+        if (!verifiedUser) {
             return res.status(404).send({
-                ok:false,
-                message:"Datos incorrectos"
+                ok: false,
+                message: "Datos incorrectos"
             })
         }
 
@@ -193,19 +207,19 @@ async function login(req, res){
 
         //Generar un token para el usuario de tal modo que sus datos originales no puedan ser manipulados
 
-        var token = jwt.sign({ user}, secret,{expiresIn: "1h"});
+        var token = jwt.sign({ user }, secret, { expiresIn: "1h" });
 
         res.send({
-            ok:true,
-            message:"Login correcto",
+            ok: true,
+            message: "Login correcto",
             user,
             token
         })
 
-    }catch (error){
+    } catch (error) {
         console.log(error)
         res.status(500).send({
-            ok:false,
+            ok: false,
             message: "No se pudo hacer el login"
         })
     }
