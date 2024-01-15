@@ -1,6 +1,9 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
+const secret = 'alfabeta';
+
 
 //Obtener usuarios
 async function getUser(req, res) {
@@ -150,32 +153,53 @@ async function login(req, res){
     try{
 
         //Obtenemos del body el email y el password
+        const {password, email} =  req.body;
         // const password = req.body.password,
         // const email = req.body.email,
-        //estas 2 linas de arriba es lo mismo que la linea de abajo.
-        const {password, email} =  req.body;
+        //estas 2 linas es lo mismo que la linea de arriba.
+
+        if(!password || !email){
+            return res.status(400).send({
+                ok:false,
+                message: "Faltan datos"
+            })
+        }
 
         const user = await User.findOne({email : email.toLowerCase()})
 
         //Si no existe el usuario
+        
         if(!user){
             return res.status(404).send({
                 ok:false,
                 message: "No existe el usuario"
             })
         }
+        
 
-        //Si existe el usuario, comparamos la contrase;a
-        const verifiedUser = bcrypt.compare(password, user.password)
+        //Si existe el usuario, y la pass no es correcta, devuelve un error.
+        const verifiedUser = await bcrypt.compare(password, user?.password)
 
+        if(!verifiedUser){
+            return res.status(404).send({
+                ok:false,
+                message:"Datos incorrectos"
+            })
+        }
 
-        //Devolvemos un error si la contrase;a no es correcta
         //Realizar el login y devolver respuesta correcta.
 
+        user.password = undefined; //Esto es importante para que no se muestre el password hasheado/
+
+        //Generar un token para el usuario de tal modo que sus datos originales no puedan ser manipulados
+
+        var token = jwt.sign({ user}, secret,{expiresIn: "1h"});
 
         res.send({
             ok:true,
-            message:"Login correcto"
+            message:"Login correcto",
+            user,
+            token
         })
 
     }catch (error){
@@ -197,3 +221,21 @@ module.exports = {
     login,
 }
 
+// OPERADOR DE ENCADENAMIENTO OPCIONAL (channing operator)
+
+// 1 OPCION
+// if(user){
+//     if(user.profile){
+//         if(user.profile.name){
+//             console.log(user.profile.name)
+//         }
+//     }
+// }
+
+// 2 OPCION
+// if(user?.profile?.name){
+//     console.log(user.profile.name)
+// }
+
+// 3 OPCION
+// if(user && user.profile && user.profile.name)
