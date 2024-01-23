@@ -227,7 +227,6 @@ async function login(req, res) {
 
 
 module.exports = {
-    // hellowController,
     createUser,
     getUser,
     deleteUser,

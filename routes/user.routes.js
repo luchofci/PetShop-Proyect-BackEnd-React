@@ -6,7 +6,7 @@ const userController = require('../controllers/user.controllers')
 const jwtVerify = require("../middlewares/isAuth")
 
 // Definimos ruta obtener todos los usuarios GET
-router.get('/users/:id?', jwtVerify, userController.getUser);
+router.get('/users/:id?', userController.getUser);
 
 // Agregamos un nuevo usuario POST
 router.post('/users', userController.createUser);
