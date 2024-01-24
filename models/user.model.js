@@ -10,7 +10,7 @@ const userSchema = new Schema({
         trim: true,
         validate:{
             validator: function(name){
-                const regex = /^[a-zA-Z\s]*$/;
+                const regex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*$/;
                 return regex.test(name)
             },
         },
