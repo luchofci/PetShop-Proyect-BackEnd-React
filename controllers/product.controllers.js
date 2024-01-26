@@ -56,7 +56,7 @@ async function createProduct(req, res) {
 
         const product = new Product(req.body);
 
-        //Guardamos el product
+        //Guardamos el producto
         const productSaved = await product.save()
 
 
