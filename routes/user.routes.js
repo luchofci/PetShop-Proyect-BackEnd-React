@@ -11,7 +11,7 @@ router.get('/users/:id?', userController.getUser);
 // Agregamos un nuevo usuario POST
 router.post('/users', userController.createUser);
 
-// Borrar un usuario DELETE
+// Borrar un usuario DELETEE
 //La route no es solo /user sino que tambien espera un IDuser
 router.delete('/users/:idUser', jwtVerify, userController.deleteUser);
 //Esta es una copioa del de arriba pero ejemplo con 2 parametros. Asimismo el signo de pregunta al final hace q ese parametro en particular noi sea obligatorio.
