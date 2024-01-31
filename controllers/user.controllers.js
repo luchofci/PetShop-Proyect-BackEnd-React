@@ -100,7 +100,7 @@ async function deleteUser(req, res) {
 
         //Comprobar si la persona que desea borrar es un ADMIN?ROLE, si no es ADMIN non lo dejo continuar.
         if(req.user.role !== "ADMIN_ROLE"){
-            return res.status(401).send({
+            return res.status(403).send({
                 ok:false,
                 message: "No tienes permisos para realizar esta accion"
             })
