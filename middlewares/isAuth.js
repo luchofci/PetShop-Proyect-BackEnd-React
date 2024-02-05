@@ -5,7 +5,12 @@ function jwtVerify(req, res, next){
     //Obtener el token de la request
     const token = req.headers.authorization;
 
-
+    if(!token){
+        return res.status(400).send({
+            ok: false,
+            message:"No se proporciono un token"
+        })
+    }
 
     jwt.verify(token, secret, (error, payload)=>{
         // En esta funcion, marcamos 2 caminos.

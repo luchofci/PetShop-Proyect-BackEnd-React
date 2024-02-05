@@ -28,7 +28,7 @@ async function getUser(req, res) {
             }) //mostrar error sin return // EL return es importante, xq no cortaria el IF si no esta.
         }
 
-        const users = await User.find()
+        const users = await User.find().select({ password: 0, __v:0 })
 
         if (!users.length) {
             return res.status(404).send({
@@ -138,7 +138,14 @@ async function updateUser(req, res) {
     console.log(req.query)
 
     try {
-
+        if(req.user.role !== "ADMIN_ROLE") {
+            return res.status(403).send({
+                ok: false,
+                message: "No tienes permisos para actualizar usuarios"
+            })
+        }
+        
+        
         const id = req.params.id
         const nuevosValoresBody = req.body
         const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, { new: true })
@@ -179,14 +186,16 @@ async function login(req, res) {
             })
         }
 
-        const user = await User.findOne({ email: email.toLowerCase() })
+        const user = await User.findOne({ 
+            email: email.toLowerCase() 
+        })
 
         //Si no existe el usuario
 
         if (!user) {
             return res.status(404).send({
                 ok: false,
-                message: "No existe el usuario"
+                message: "Datos incorrectos"
             })
         }
 
@@ -207,7 +216,11 @@ async function login(req, res) {
 
         //Generar un token para el usuario de tal modo que sus datos originales no puedan ser manipulados
 
-        var token = jwt.sign({ user }, secret, { expiresIn: "1h" });
+        var token = jwt.sign({ 
+            user 
+        }, secret, { 
+            expiresIn: "1h" 
+        });
 
         res.send({
             ok: true,

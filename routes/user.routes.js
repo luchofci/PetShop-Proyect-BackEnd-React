@@ -20,7 +20,7 @@ router.delete('/users/:idUser', jwtVerify, userController.deleteUser);
 
 
 // Actualizar un usuario PUT
-router.put('/users/:id', userController.updateUser);
+router.put('/users/:id', jwtVerify, userController.updateUser);
 //Los query params, no tienen orden.
 
 //Login de usuario 
