@@ -2,7 +2,7 @@ const express = require('express');
 const { route } = require('../app');
 //Iniciamos el objeto router para poder definir rutas
 const router = express.Router();
-const userController = require('../controllers/user.controllers')
+const userController = require('../controllers/user.controller')
 const jwtVerify = require("../middlewares/isAuth")
 
 // Definimos ruta obtener todos los usuarios GET

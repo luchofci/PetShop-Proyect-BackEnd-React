@@ -60,6 +60,11 @@ const userSchema = new Schema({
             'ADMIN_ROLE',
         ]
     },
+    location:{
+        type:String,
+        required: false,
+        trim: true,
+    },
     bornDate:{
         type: Number,
         required: false,

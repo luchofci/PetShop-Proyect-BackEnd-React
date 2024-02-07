@@ -6,48 +6,42 @@ const productSchema = new Schema({
     name: {
         type: String, 
         required: true, 
-        minlength: 3, 
-        maxlength: 60,
         trim: true,
+        unique: true,
+        minlength: 2, 
+        maxlength: 80,
     },
-    email: {
-        type: String, 
-        required: true,
-        unique:true, //Esto significa que en mi base de datos este valor email, no haya otro igual
-        index: true, //Buscar el valor por indice.
-        lowercase: true, //Para quie el email nos ea sensible a mayuscula ni minuscula
-        trim: true, // Sirve para cuando escriben, osea tengo una string, y dejaron espacios adelante y al final, los quite.
-        minlength:  6,
-        maxlength: 80,   
-        validate:{ //Antes de guardar, valida estos valores, valida si el valor que esta enviando el usuario pasa el test de patrones
-            validator: function(value){
-                const regex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
-                return regex.test(value)
-            },
-        },
-    },
-    password: {
+    description:{
         type: String,
         required: true,
-        minlength: 4,
-        maxlength: 65,
         trim: true,
+        minlength: 6, 
+        maxlength: 500,
+    },
+    price:{
+        type: Number,
+        required: true,
+        min: 1,
+        max: 100000000
     },
     image:{
         type: String,
         required: false,
-        trim: true,
+        trim: true
     },
-    role:{
-        type:String,
-        required: false,
-        default: 'USER_ROLE',
-        enum: [ //aca se enumeran todos las clases de usuarios que puede tener, esto depende del requerimiento del cliente.
-            'USER_ROLE',
-            'CLIENT_ROLE',
-            'ADMIN_ROLE',
-        ]
+    createdAt:{
+        type: Date,
+        default: Date.now // Sin los parentesis como en Js
     },
+    category:{
+        type: Schema.Types.ObjectId,
+        ref:"Category",
+        required: true,
+    },
+    active:{
+        type: Boolean,
+        default: true,
+    }
 
 },)
 

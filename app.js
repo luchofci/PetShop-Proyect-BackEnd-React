@@ -1,18 +1,15 @@
-const express =  require('express')
+const express = require('express');
 const app = express();
-const cors = require('cors')
+const cors = require('cors') //LIBRERIA 
+const productRoutes=require('./routes/product.routes')
+const userRoutes = require('./routes/user.routes')
+const categoryRoutes=require("./routes/category.routes")
 
-const userRoutes = require('./routes/user.routes');
-const productRoutes = require('./routes/product.routes')
-
-//Middlewares -  Esto es importante para recordarle a la app que sabe leer Json (cuando se realice la request, el servidor tenga la habilidad de entender el body que estoy recibiendo.-)
-app.use(express.json()); //Cuando venga un re.body poder leerlo
-app.use(express.urlencoded({extended:true}));
-app.use(cors());
-
-// Aplicamos o integramos las rutas a nuestros server
-app.use([userRoutes, productRoutes]) //Esto es para que la app use las rutas definidas en userRoutes
+//Middlewares(aplicaciones intermedias) acciones que se ejecutan en mi servidor antes de llamara a cualquier ruta
+app.use(express.json());//cuando venga un req.body poder leerlo
+app.use(cors()); //incorporar servivio cors a las funcionalidades
+app.use(express.urlencoded({ extended: true }));
+//Aplicamos o Integramos las rutas a nuestro server
+app.use([userRoutes,productRoutes, categoryRoutes]); //que app use las rutas definidas en userRoutes/productRoutes
 
 module.exports = app;
-
-
