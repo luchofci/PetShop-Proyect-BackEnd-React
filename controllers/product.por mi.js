@@ -66,30 +66,7 @@
 //         // }
 
 
-//         const id = req.params.id
-
-//         const productDeleted = await Product.findByIdAndDelete(id)
-
-//         if(!productDeleted){
-//             return res.status(404).send({
-//                 ok:false,
-//                 message: "No se encontro el productos"
-//             })
-//         }
-
-//         res.send({
-//             ok: true,
-//             message: "Producto Borrado correctamente",
-//             product: productDeleted
-//         })
-
-//     } catch (error) {
-//         res.status(500).send({
-//             ok: false,
-//             message: "No se pudo crear el product"
-//     });
-// }
-// }
+//       
 
 
 // module.exports = {

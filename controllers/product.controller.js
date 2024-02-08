@@ -104,9 +104,39 @@ async function updateProduct(req, res) {
 }
 }
 
+async function deleteProduct(req, res) {
+    try{
+
+
+
+        
+        const id = req.params.id;
+
+        const product =  await Product.findByIdAndDelete(id);
+
+        if(!product){
+            return res.status(404).send({
+                ok:false,
+                message:"Producto no encontrado"
+            })
+        }
+        return res.status(200).send({
+            ok:true,
+            message:"El producto fue eliminado correctamente"
+        })
+
+    } catch (error) {
+        consle.log(error)
+        return res.status(500).send({
+        ok: false,
+        message: "Error al eliminar el producto"
+        });
+    }
+}
 
 module.exports = {
     getProduct,
     createProduct,
     updateProduct,
+    deleteProduct,
 }
