@@ -9,6 +9,8 @@ const secret = 'alfabeta';
 async function getUser(req, res) {
     try {
         const id = req.params.id; //Si no viene undefined.
+
+        // Si recibo ID busco un usuario especifico
         if (id) {
             const user = await User.findById(id, { password: 0 }) // si pongo 0 no te da ese dato, si pongo 1, te da ese elemento.
 
@@ -28,7 +30,21 @@ async function getUser(req, res) {
             }) //mostrar error sin return // EL return es importante, xq no cortaria el IF si no esta.
         }
 
-        const users = await User.find().select({ password: 0, __v:0 })
+        const limit = parseInt(req.query.limit) || 5;
+        const page = parseInt(req.query.page) || 0;
+
+        // ESTE PROMISE ALL ES PARA QUE CUANDO HAY MAS DE UNA PROIMERA, LAS REALICE AL MISMO TIEMPO, SINO POR EL AWAIT, NO SE REALISZA LA SEGUNIDA HASTA QUE NO SE COMPLETE LA PRIMERA. 
+        const [total, users] = await Promise.all([
+
+            User.countDocuments(), // total
+
+            User.find().limit(limit).skip(page * limit).collation({ locale:"es"}).sort({name: 1}) .select({ password: 0, __v:0 }) //  users
+
+        ])
+        // aca abajo seria las mismas lineas pero sin el promise ALL
+        // const users = await User.find().limit(limit).skip(page * limit).collation({ locale:"es"}).sort({name: 1}) .select({ password: 0, __v:0 })
+
+        // const total = await User.countDocuments()
 
         if (!users.length) {
             return res.status(404).send({
@@ -42,7 +58,8 @@ async function getUser(req, res) {
         res.send({
             users,
             message: 'Usuarios obtenidos correctamente',
-            ok: true
+            ok: true,
+            total
         })
     }
     catch (error) {

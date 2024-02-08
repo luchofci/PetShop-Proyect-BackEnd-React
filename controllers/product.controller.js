@@ -23,9 +23,20 @@ async function getProduct(req, res){
                 message: "Producto encontraro",
             }) //mostrar error sin return // EL return es importante, xq no cortaria el IF si no esta.
         }
-        const products =  await Product.find().populate("category", "name")
-        // Este populate es para especificar que en las categorias que se buscan de cada producto, no te de el numero de ID, sino que aparte del ID, te de el nombre de el objeto de la categoa del schema y de ese objeto el name.
 
+        const limit = parseInt(req.query.limit) || 3;
+        const page = parseInt(req.query.page) || 0;
+
+
+
+
+        const products =  await Product.find().populate("category", "name").limit(limit).skip(page * limit).collation({ locale:"es"}).sort({name: 1});
+        // Este populate es para especificar que en las categorias que se buscan de cada producto, no te de el numero de ID, sino que aparte del ID, te de el nombre de el objeto de la categoa del schema y de ese objeto el name.
+        // el metodo LIMIT, limita la cantidad de elementos a mostrar, por si tenemos una BD muy cargada, se muetren de X cantidad de elementos por pagina.
+        // Metodo SKIP es para que X cantidad de elementos se las salte.
+        // El SKIP se usa para pasar de pagina de productos, tocas la pagina 2, entonces te salta todos los productos de la pagina uno (dependiendo el limitie q setiaste), y te devuelve N cantidad segun el SKIP en la pagina 2.
+        //SORT es un metodo para ordenar alfabeticamente los elementos, PERO, ordena primero los de mayuscula y luego minuscula
+        //COLLATION es para solucionar el tema de las mayusculas, y ordena indiferentemente.
         return res.status(200).send({
             ok: true,
             message: "Productos obtenenidos Correctamente",
@@ -109,7 +120,7 @@ async function deleteProduct(req, res) {
 
 
 
-        
+
         const id = req.params.id;
 
         const product =  await Product.findByIdAndDelete(id);
