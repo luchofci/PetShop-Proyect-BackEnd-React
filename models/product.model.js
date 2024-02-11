@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const productSchema = new Schema({
-    name: {
+    frontName: {
         type: String, 
         required: true, 
         trim: true,
@@ -11,7 +11,22 @@ const productSchema = new Schema({
         minlength: 2, 
         maxlength: 80,
     },
-    description:{
+    frontDescription:{
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 6, 
+        maxlength: 500,
+    },
+    backtName: {
+        type: String, 
+        required: true, 
+        trim: true,
+        unique: true,
+        minlength: 2, 
+        maxlength: 80,
+    },
+    backDescription:{
         type: String,
         required: true,
         trim: true,
@@ -29,6 +44,11 @@ const productSchema = new Schema({
         required: false,
         trim: true
     },
+    details:{
+        type: String,
+        required: true,
+        trim:true,
+    },
     createdAt:{
         type: Date,
         default: Date.now // Sin los parentesis como en Js
@@ -37,6 +57,13 @@ const productSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref:"Category",
         required: true,
+    },
+    stock:{
+        type: Number,
+        required: true,
+        min: 0,
+        max: 10000,
+
     },
     active:{
         type: Boolean,
