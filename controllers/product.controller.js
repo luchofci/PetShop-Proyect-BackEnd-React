@@ -54,7 +54,7 @@ async function getProduct(req, res){
 
 async function createProduct(req, res){
     try{
-
+        console.log(req.body)
         const product = new Product(req.body);
 
         //Guardamos el producto
