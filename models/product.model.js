@@ -24,14 +24,14 @@ const productSchema = new Schema({
         trim: true,
         unique: true,
         minlength: 2, 
-        maxlength: 80,
+        maxlength: 255,
     },
     backDescription:{
         type: String,
         required: true,
         trim: true,
         minlength: 6, 
-        maxlength: 500,
+        maxlength: 1000,
     },
     price:{
         type: Number,
