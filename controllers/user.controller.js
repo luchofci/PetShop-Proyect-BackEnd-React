@@ -77,9 +77,13 @@ async function getUser(req, res) {
 async function createUser(req, res) {
 
     try {
-
+        
         const user = new User(req.body);
+        
+        if(req.file?.filename){
+            user.image = req.file.filename
 
+        }
         //Encriptar la contrase;a // Estas 2 linas son iguales, como son asincronas, eso se lo das con el await, o poniendo hashSync
         // user.password = bcrypt.hashSync(user.password, saltRounds)
         user.password = await bcrypt.hash(user.password, saltRounds)
@@ -256,12 +260,65 @@ async function login(req, res) {
 }
 
 
+async function searchUser(req, res){
+    try{
+        const search = new RegExp(req.params.search, "i");  // Esto sera un nombre, completo o incompleto, depende lo q ingrese el usuario
+        // La expresion de I, no es sensitivo a la mayusculo o minuscula.
+        // Regex es una expresion regular.-
+
+        //Aca tenemos busqueda, pero bajo 2 criterios
+        // El $OR busca uno o el otro, o ambos, pero si pongo $AND buscara que AMBOS criterios esten.
+        const users = await User.find({
+            $or:[
+                {name: search}, // Expresion regular
+                {email: search},
+            ]
+        })
+
+        // $and: [
+        //     {age: {$gte: 18}},
+        //     {
+        //         $or: [
+        //             {name: search}, 
+        //             {email: search},
+        //         ],
+        //     },
+        // ]
+        // }),
+
+        /*  $gt - greater than
+            $lt - Lesser than
+            $gte - greater than or equal
+            $gte - Lesser than or equal
+        */
+
+
+
+
+
+        console.log(users);
+        return res.send({
+            ok: true,
+            message: "Usuarios encontrados",
+            users
+        })
+
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            ok: false,
+            message: 'No se pudo buscar el usuario'
+        })
+    }
+}
+
 module.exports = {
     createUser,
     getUser,
     deleteUser,
     updateUser,
     login,
+    searchUser,
 }
 
 // OPERADOR DE ENCADENAMIENTO OPCIONAL (channing operator)

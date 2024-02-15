@@ -5,12 +5,13 @@ const router = express.Router();
 const userController = require('../controllers/user.controller')
 const jwtVerify = require("../middlewares/isAuth");
 const { isAdmin } = require('../middlewares/isAdmin');
+const uploadImage = require('../middlewares/uploadUserImage')
 
 // Definimos ruta obtener todos los usuarios GET
 router.get('/users/:id?', userController.getUser);
 
 // Agregamos un nuevo usuario POST
-router.post('/users', userController.createUser);
+router.post('/users',uploadImage, userController.createUser);
 
 // Borrar un usuario DELETEEE
 //La route no es solo /user sino que tambien espera un IDuser
@@ -21,20 +22,14 @@ router.delete('/users/:idUser', [jwtVerify, isAdmin], userController.deleteUser)
 
 
 // Actualizar un usuario PUT
-router.put('/users/:id', jwtVerify, userController.updateUser);
+router.put('/users/:id', [jwtVerify, uploadImage], userController.updateUser);
 //Los query params, no tienen orden.
 
 //Login de usuario 
 router.post('/login', userController.login);
 
-
-
-// Obtener un usuario especifico GET
-// router.get('/users/:id', userController.getUser)
-
-
-
-// router.get('/test', userController.hellowController)
+// Busqueda de Usuario (No es obligatorio en el final)
+router.get('/users/search/:search', userController.searchUser)
 
 
 
