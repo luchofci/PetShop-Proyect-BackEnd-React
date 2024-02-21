@@ -14,6 +14,6 @@ const uploadMulter = multer({
 
 })
 
-const upload = uploadMulter.single('product'); // Campo de la request donde viene el archivo ('lo q esta en parentesis')
+const upload = uploadMulter.single('image'); // Campo de la request donde viene el archivo ('lo q esta en parentesis')
 
 module.exports = upload;
