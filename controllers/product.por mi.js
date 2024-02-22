@@ -55,18 +55,17 @@
 
 //     try {
 
-//         //Comprobar si la persona que desea borrar es un ADMIN?ROLE, si no es ADMIN non lo dejo continuar.
+//         // Comprobar si la persona que desea borrar es un ADMIN?ROLE, si no es ADMIN non lo dejo continuar.
 
-//         // VER
-//         // if(req.user.role !== "ADMIN_ROLE"){
-//         //     return res.status(401).send({
-//         //         ok:false,
-//         //         message: "No tienes permisos para realizar esta accion"
-//         //     })
-//         // }
+//         VER
+//         if(req.user.role !== "ADMIN_ROLE"){
+//             return res.status(401).send({
+//                 ok:false,
+//                 message: "No tienes permisos para realizar esta accion"
+//             })
+//         }
 
 
-//       
 
 
 // module.exports = {
