@@ -84,6 +84,10 @@ async function updateProduct(req, res) {
     const id = req.params.id;
         // Obtenemos los valores nuevos o actualizados.
     const body = req.body;
+    // VER ESTE IF SI LA VARIANTE FILENAME ES CORRECTA
+        if(req.file?.filename){
+            update.image = req.file.filename
+        }
 
     const product = await Product.findById(id);
 
