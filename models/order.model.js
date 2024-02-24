@@ -1,11 +1,11 @@
-//Libreria a partir de ella creamos un modelo
+// Libreria a partir de ella creamos un modelo
 const mongoose = require("mongoose");
 
-//receta - de mongoose traemos ese esquema
+// receta - de mongoose traemos ese esquema
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  //necesitamos saber de quien es la orden
+  // necesitamos saber de quien es la orden
     user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -17,7 +17,7 @@ const orderSchema = new Schema({
 },
     products: [
     {
-      //ID del producto
+      // ID del producto
     productId: {
         type: Schema.Types.ObjectId,
         ref: "Product",
@@ -43,5 +43,5 @@ const orderSchema = new Schema({
         default: "PENDING",
     },
 });
-//guarda la collection  'orders'
+// guarda la collection  'orders' - Siempre en plural y enminuscula.-
 module.exports = mongoose.model("Order", orderSchema);
