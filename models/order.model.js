@@ -15,6 +15,7 @@ const orderSchema = new Schema({
     type: Number,
     required: true,
 },
+    
     products: [
     {
       // ID del producto
