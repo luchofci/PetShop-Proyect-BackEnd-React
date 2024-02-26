@@ -8,7 +8,7 @@ async function getProduct(req, res){
     try{
         const id = req.params.id; //Si no viene undefined.
         if (id) {
-            const product = await Product.findById(id) 
+            const product = await Product.findById(id).populate("category", "name")
 
             if (!product) {
                 return res.status(404).send({
@@ -54,8 +54,13 @@ async function getProduct(req, res){
 
 async function createProduct(req, res){
     try{
-        console.log(req.body)
         const product = new Product(req.body);
+
+            if(req.file?.filename){
+                product.image = req.file.filename;
+
+            }
+
 
         //Guardamos el producto
         const productDB = await product.save()
@@ -80,11 +85,19 @@ async function createProduct(req, res){
 async function updateProduct(req, res) {
 
     try{
+
+        if(req.user.role !== "ADMIN_ROLE") {
+            return res.status(403).send({
+                ok: false,
+                message: "No tienes permisos para actualizar usuarios"
+            })
+        }
+
         // Obtenemos el ID para saber a quien tenemos que actualizar
     const id = req.params.id;
         // Obtenemos los valores nuevos o actualizados.
     const body = req.body;
-    // VER ESTE IF SI LA VARIANTE FILENAME ES CORRECTA
+    
         if(req.file?.filename){
             update.image = req.file.filename
         }

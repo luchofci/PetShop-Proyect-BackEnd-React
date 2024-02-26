@@ -14,7 +14,7 @@ async function getUser(req, res) {
         if (id) {
             const user = await User.findById(id, { password: 0 }) // si pongo 0 no te da ese dato, si pongo 1, te da ese elemento.
 
-            if (!user.length) {
+            if (!user) {
                 return res.status(404).send({
                     ok: false,
                     message: "No se encontro el usuario"
@@ -77,7 +77,7 @@ async function getUser(req, res) {
 async function createUser(req, res) {
 
     try {
-        
+        // Creamos nuevo usuario.-
         const user = new User(req.body);
         
         if(req.file?.filename){
@@ -156,8 +156,6 @@ async function deleteUser(req, res) {
 
 async function updateUser(req, res) {
 
-    console.log(req.query)
-
     try {
         if(req.user.role !== "ADMIN_ROLE") {
             return res.status(403).send({
@@ -169,6 +167,15 @@ async function updateUser(req, res) {
         
         const id = req.params.id
         const nuevosValoresBody = req.body
+
+        if(!user){
+            return res.status(404).send({
+                ok:false,
+                message:"Usuario no encontrado"
+            })
+        }
+
+
         const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, { new: true })
 
         res.send({
