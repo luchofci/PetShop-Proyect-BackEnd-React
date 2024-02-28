@@ -135,7 +135,12 @@ async function updateProduct(req, res) {
 async function deleteProduct(req, res) {
     try{
 
-
+        if(req.user.role !== "ADMIN_ROLE"){
+            return res.status(401).send({
+                ok:false,
+                message: "No tienes permisos para realizar esta accion"
+            })
+        }
 
 
         const id = req.params.id;
