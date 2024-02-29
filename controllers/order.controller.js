@@ -21,12 +21,23 @@ async function createOrder(req, res) {
 
 async function getOrders(req, res) {
     try {
-        //si es ADMIN q me traiga todas las ordenes
-        if (req.user.role === "ADMIN_ROLE") {
+        //si es ADMIN q me traiga todas las ordenes // SI SOLICITA EL ADMIN
+        if (req.user?.role === "ADMIN_ROLE") {
             const orders = await Order.find()
-                .populate("user")
+                .populate("user", 'name email')
                 .populate("products.producId"); //dentro del array products que me traiga el ID
+                return res.status(200).send({
+                    ok: true,
+                    orders
+                })
         }
+        // Si lo solicita el usuario, muestra solo su ORDENES
+        const order = await Order.find({ user: req.user._id}).populate('products.producId')
+            return res.status(200).send({
+                ok: true,
+                order
+            })
+
     } catch (error) {
         console.log(error);
         return res.status(500).send({
