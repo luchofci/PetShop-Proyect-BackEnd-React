@@ -24,10 +24,6 @@ const mongoose = require('mongoose');
 })()
 
 
-// app.get('/', (req, res)=>{
-//     console.log('Endpoint llamado');
-//     res.send('Hellow World!')
-// })
 
 
 

@@ -5,8 +5,8 @@ const jwtVerify = require("../middlewares/isAuth");
 
 
 
-router.post('/orders', jwtVerify, orderController.createOrder);
-
 router.get('/orders', jwtVerify, orderController.getOrders)
+
+router.post('/orders', jwtVerify, orderController.createOrder);
 
 module.exports = router 
