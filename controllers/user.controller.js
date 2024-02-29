@@ -30,7 +30,7 @@ async function getUser(req, res) {
             }) //mostrar error sin return // EL return es importante, xq no cortaria el IF si no esta.
         }
 
-        const limit = parseInt(req.query.limit) || 5;
+        const limit = parseInt(req.query.limit) || 10;
         const page = parseInt(req.query.page) || 0;
 
         // ESTE PROMISE ALL ES PARA QUE CUANDO HAY MAS DE UNA PROIMERA, LAS REALICE AL MISMO TIEMPO, SINO POR EL AWAIT, NO SE REALISZA LA SEGUNIDA HASTA QUE NO SE COMPLETE LA PRIMERA. 

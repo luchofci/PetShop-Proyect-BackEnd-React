@@ -11,7 +11,7 @@ const uploadImage = require('../middlewares/uploadUserImage')
 router.get('/users/:id?', userController.getUser);
 
 // Agregamos un nuevo usuario POST
-router.post('/users',uploadImage, [jwtVerify, isAdmin], userController.createUser);
+router.post('/users',uploadImage, userController.createUser);
 
 // Borrar un usuario DELETEEE
 //La route no es solo /user sino que tambien espera un IDuser
@@ -20,7 +20,7 @@ router.delete('/users/:idUser', [jwtVerify, isAdmin], userController.deleteUser)
 // router.delete('/users/:idUser/:active?', userController.deleteUser);
 
 // Actualizar un usuario PUT
-router.put('/users/:id', uploadImage,[jwtVerify, uploadImage], userController.updateUser);
+router.put('/users/:id', uploadImage, [jwtVerify, uploadImage], userController.updateUser);
 
 //Los query params, no tienen orden.
 //Login de usuario 

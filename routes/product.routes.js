@@ -9,7 +9,7 @@ const uploadImage = require('../middlewares/uploadProductImage')
 
 router.get('/products/:id?', productController.getProduct);
 // Agregamos nuevo producto.-
-router.post('/products', uploadImage, [jwtVerify, isAdmin],productController.createProduct);
+router.post('/products', uploadImage, productController.createProduct);
 // actualizamos producto.-
 router.put('/products/:id', uploadImage, [jwtVerify, isAdmin], productController.updateProduct);
 
