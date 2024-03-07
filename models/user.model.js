@@ -68,6 +68,10 @@ const userSchema = new Schema({
     bornDate:{
         type: Number,
         required: false,
+    },
+    active:{
+        type:Boolean,
+        required: false,
     }
 });
 
