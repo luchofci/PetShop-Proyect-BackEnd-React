@@ -176,7 +176,7 @@ async function updateUser(req, res) {
         }
 
 
-        const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, { new: true })
+        const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, token, { new: true })
 
         res.send({
             ok: true,
