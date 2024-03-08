@@ -69,9 +69,23 @@ const userSchema = new Schema({
         type: Number,
         required: false,
     },
+    // active:{
+    //     type:Boolean,
+    //     required: false,
+    // }
     active:{
-        type:Boolean,
+        type:String,
         required: false,
+        default: 'No_Activo',
+        enum: [ 
+            'Activo',
+            'No_Activo'            
+        ]
+    },
+    observation:{
+        type:String,
+        required: false,
+        trim: true,
     }
 });
 
