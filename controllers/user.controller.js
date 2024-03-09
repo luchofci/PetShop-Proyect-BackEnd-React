@@ -164,8 +164,8 @@ async function updateUser(req, res) {
             })
         }
         
-        
         const id = req.params.id
+        const user = await User.findById(id)
         const nuevosValoresBody = req.body
 
         if(!user){
@@ -174,9 +174,16 @@ async function updateUser(req, res) {
                 message:"Usuario no encontrado"
             })
         }
-
-
-        const userUpdated = await User.findByIdAndUpdate(id, nuevosValoresBody, token, { new: true })
+        // , token, { new: true }
+        if (req.file?.filename) {
+            nuevosValoresBody.image = req.file.filename;
+        }
+        // { new: true }
+        const aux = {
+            ...nuevosValoresBody,
+            password: user.password,            
+        }        
+        const userUpdated = await User.findByIdAndUpdate(id, aux, { new: true })
 
         res.send({
             ok: true,
@@ -189,7 +196,7 @@ async function updateUser(req, res) {
         console.log(error)
         res.send({
             ok: false,
-            message: 'No se puedo actualizar el usuario'
+            message: 'No se pudo actualizar el usuario'
         })
     }
 
@@ -223,10 +230,9 @@ async function login(req, res) {
         if (!user) {
             return res.status(404).send({
                 ok: false,
-                message: "Datos incorrectos"
+                message: "Datos incorrectos1"
             })
         }
-
 
         //Si existe el usuario, y la pass no es correcta, devuelve un error.
         const verifiedUser = await bcrypt.compare(password, user?.password)
@@ -234,7 +240,7 @@ async function login(req, res) {
         if (!verifiedUser) {
             return res.status(404).send({
                 ok: false,
-                message: "Datos incorrectos"
+                message: "Datos incorrectos2"
             })
         }
 
@@ -282,26 +288,6 @@ async function searchUser(req, res){
             ]
         })
 
-        // $and: [
-        //     {age: {$gte: 18}},
-        //     {
-        //         $or: [
-        //             {name: search}, 
-        //             {email: search},
-        //         ],
-        //     },
-        // ]
-        // }),
-
-        /*  $gt - greater than
-            $lt - Lesser than
-            $gte - greater than or equal
-            $gte - Lesser than or equal
-        */
-
-
-
-
 
         console.log(users);
         return res.send({
@@ -328,21 +314,3 @@ module.exports = {
     searchUser,
 }
 
-// OPERADOR DE ENCADENAMIENTO OPCIONAL (channing operator)
-
-// 1 OPCION
-// if(user){
-//     if(user.profile){
-//         if(user.profile.name){
-//             console.log(user.profile.name)
-//         }
-//     }
-// }
-
-// 2 OPCION
-// if(user?.profile?.name){
-//     console.log(user.profile.name)
-// }
-
-// 3 OPCION
-// if(user && user.profile && user.profile.name)

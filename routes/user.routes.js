@@ -27,7 +27,7 @@ router.put('/users/:id', [jwtVerify, uploadImage], userController.updateUser);
 router.post('/login', userController.login);
 
 // Busqueda de Usuario (No es obligatorio en el final)
-router.get('/users/search/:search', userController.searchUser)
+router.get('/users/search/:search', userController.searchUser);
 //Exportamos router para pdoer usar rutas en app.js
 module.exports = router;
 
