@@ -11,7 +11,7 @@ const uploadImage = require('../middlewares/uploadUserImage')
 router.get('/users/:id?', userController.getUser);
 
 // Agregamos un nuevo usuario POST
-router.post('/users',[jwtVerify, uploadImage], userController.createUser);
+router.post('/users', uploadImage, userController.createUser);
 
 // Borrar un usuario DELETEEE
 //La route no es solo /user sino que tambien espera un IDuser
